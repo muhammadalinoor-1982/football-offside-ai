@@ -25,11 +25,20 @@ os.makedirs("uploads", exist_ok=True)
 os.makedirs("outputs", exist_ok=True)
 
 # add for deployment
-app.mount(
+""" app.mount(
     "/static",
     StaticFiles(directory="static"),
     name="static"
+) """
+
+# bug fixing code
+app.mount(
+    "/assets",
+    StaticFiles(directory="static/assets"),
+    name="assets"
 )
+# bug fixing code
+
 # add for deployment
 
 app.mount(
