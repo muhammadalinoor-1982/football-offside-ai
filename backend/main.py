@@ -1,4 +1,6 @@
 # add for deployment
+from fastapi import Request
+
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 # add for deployment
@@ -53,7 +55,7 @@ async def root():
     return FileResponse("static/index.html")
 # add for deployment
 
-@app.post("/process")
+""" @app.post("/process")
 async def upload_video(video: UploadFile):
 
     input_path = f"uploads/{video.filename}"
@@ -66,6 +68,25 @@ async def upload_video(video: UploadFile):
     return {
         "verdict": verdict,
         "video_url": f"http://localhost:8000/outputs/{output_file}"
+    } """
+
+
+# Update for Deployment
+@app.post("/process")
+async def upload_video(
+    request: Request,
+    video: UploadFile
+):
+    input_path = f"uploads/{video.filename}"
+
+    with open(input_path, "wb") as f:
+        f.write(await video.read())
+
+    verdict, output_file = process_video(input_path)
+
+    return {
+        "verdict": verdict,
+        "video_url":
+            f"{request.base_url}outputs/{output_file}"
     }
-
-
+# Update for Deployment
